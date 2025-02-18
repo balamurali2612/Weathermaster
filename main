@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather App</title>
+    
+</head>
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Arial', sans-serif;
+}
+
+body {
+    background-color: #f0f4f8;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+.container {
+    background-color: #fff;
+    border-radius: 10px;
+    padding: 40px;
+    width: 300px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+header h1 {
+    font-size: 2rem;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+header p {
+    font-size: 1rem;
+    color: #777;
+    margin-bottom: 20px;
+}
+
+.search-box {
+    margin-bottom: 20px;
+}
+
+.search-box input {
+    padding: 10px;
+    width: 80%;
+    border: 2px solid #ddd;
+    border-radius: 5px;
+    font-size: 1rem;
+    outline: none;
+}
+
+.search-box button {
+    padding: 10px 20px;
+    margin-top: 10px;
+    background-color: #4CAF50;
+    border: none;
+    color: white;
+    font-size: 1rem;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 100%;
+}
+
+.search-box button:hover {
+    background-color: #45a049;
+}
+
+.weather-info {
+    margin-top: 20px;
+    color: #333;
+}
+
+.weather-info h2 {
+    font-size: 1.5rem;
+    margin-bottom: 15px;
+}
+
+.weather-info p {
+    font-size: 1rem;
+    margin: 5px 0;
+}
+
+.weather-info p#description {
+    text-transform: capitalize;
+}
+
+
+</style>
+<body>
+    <div class="container">
+        <header>
+            <h1>Weather Forecast</h1>
+            <p>Get the latest weather updates for your city</p>
+        </header>
+
+        <div class="search-box">
+            <input type="text" id="city" placeholder="Enter city name">
+            <button onclick="getWeather()">Search</button>
+        </div>
+
+        <div class="weather-info" id="weather-info">
+            <h2 id="city-name">City Name</h2>
+            <p id="temperature">Temperature: -- °C</p>
+            <p id="description">Description: --</p>
+            <p id="humidity">Humidity: --%</p>
+            <p id="wind">Wind Speed: -- km/h</p>
+        </div>
+    </div>
+
+    <script>
+        function getWeather() {
+            const city = document.getElementById('city').value;
+            const apiKey = 'YOUR_API_KEY'; // Replace with your OpenWeatherMap API key
+            const apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
+
+            fetch(apiUrl)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.cod === 200) {
+                        document.getElementById('city-name').innerText = data.name;
+                        document.getElementById('temperature').innerText = `Temperature: ${data.main.temp} °C`;
+                        document.getElementById('description').innerText = `Description: ${data.weather[0].description}`;
+                        document.getElementById('humidity').innerText = `Humidity: ${data.main.humidity}%`;
+                        document.getElementById('wind').innerText = `Wind Speed: ${data.wind.speed} km/h`;
+                    } else {
+                        alert('City not found');
+                    }
+                })
+                .catch(error => alert('Error fetching weather data'));
+        }
+    </script>
+</body>
+</html>
